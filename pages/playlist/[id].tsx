@@ -1,6 +1,7 @@
 import { validateToken } from "../../lib/auth";
 import prisma from "../../lib/prisma";
 import GradientLayout from "../components/gradientLayout";
+import SongTable from "../components/songsTable";
 
 const getBGColor = (id) => {
   const colors = [
@@ -18,10 +19,20 @@ const getBGColor = (id) => {
 };
 
 const Playlist = ({ playlist }) => {
-  const color = getBGColor(playlist.id)
-  return <GradientLayout color="color">
-      <div>dfd</div>
-      </GradientLayout>
+  const color = getBGColor(playlist.id);
+
+  return (
+    <GradientLayout
+      color={color}
+      roundImage={false}
+      title={playlist.name}
+      subtitle="playlist"
+      description={`${playlist.songs.length} songs`}
+      image={`https://picsum.photos/400?random=${playlist.id}`}
+    >
+      <SongTable songs={playlist.songs} />
+    </GradientLayout>
+  );
 };
 
 export const getServerSideProps = async ({ query, req }) => {
@@ -44,9 +55,9 @@ export const getServerSideProps = async ({ query, req }) => {
       },
     },
   });
+
   return {
     props: { playlist },
   };
 };
-
 export default Playlist;
